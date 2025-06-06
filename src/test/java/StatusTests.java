@@ -15,7 +15,7 @@ public class StatusTests {
     }
 
     @Test
-    void checkTotalWithReponseLogs() {
+    void checkTotalWithResponseLogs() {
         get("https://selenoid.autotests.cloud/status")
                 .then()
                 .log().all()
