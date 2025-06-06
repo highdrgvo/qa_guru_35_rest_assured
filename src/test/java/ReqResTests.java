@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.is;
 public class ReqResTests {
 
     @Test
-    void successfulLogin415Test(){
+    void successfulLoginTest(){
         String authData = "{\n" +
                 "    \"email\": \"eve.holt@reqres.in\",\n" +
                 "    \"password\": \"cityslicka\"\n" +
