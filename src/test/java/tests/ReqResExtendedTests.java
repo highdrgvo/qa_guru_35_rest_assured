@@ -44,16 +44,19 @@ public class ReqResExtendedTests {
     @Test
     void successfulLoginPojoTest(){
 
-        LoginBodyModel authData = new LoginBodyModel();
+        LoginBodyModel auth = new LoginBodyModel();
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
 
-        authData.setEmail("eve.holt@reqres.in");
-        authData.setPassword("cityslicka");
+        auth.setEmail("eve.holt@reqres.in");
+        auth.setPassword("cityslicka");
+        apiKey.setApiKey("reqres-free-v1");
 
         LoginResponseModel response = given()
                 // LoginResponseModel response сохраняет Java-объект (в джава объект завернули на этапе extract())
                 // в переменную для последующего использования.
-                .body(authData)
-                .header("x-api-key", "reqres-free-v1")
+                .filter(withCustomTemplates())
+                .body(auth)
+                .header("x-api-key", apiKey.getApiKey())
                 .contentType(JSON)
                 .log().uri()
                 .when()
