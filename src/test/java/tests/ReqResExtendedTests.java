@@ -1,7 +1,9 @@
 package tests;
 
-import models.LoginBodyModel;
-import models.LoginResponseModel;
+import models.lombok.LoginBodyLombokModel;
+import models.lombok.LoginResponseLombokModel;
+import models.pojo.LoginBodyModel;
+import models.pojo.LoginResponseModel;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -37,7 +39,7 @@ public class ReqResExtendedTests {
     }
 
     @Test
-    void successfulLoginTest(){
+    void successfulPojoLoginTest(){
 
         LoginBodyModel authData = new LoginBodyModel();
 
@@ -61,6 +63,34 @@ public class ReqResExtendedTests {
                 .extract().as(LoginResponseModel.class);
         // .extract().as(LoginResponseModel.class) - преобразует JSON-ответ от сервера в Java-объект.
         // То есть объект был создан, но не сохранен.
+
+        assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
+
+    }
+
+    @Test
+    void successfulLombokLoginTest(){
+
+        LoginBodyLombokModel authData = new LoginBodyLombokModel();
+
+        // Чтобы lombok работал, надо установить плагин в идее
+
+        authData.setEmail("eve.holt@reqres.in");
+        authData.setPassword("cityslicka");
+        authData.setHeaderApiKey("reqres-free-v1");
+
+        LoginResponseLombokModel response = given()
+                .body(authData)
+                .header("x-api-key", authData.getHeaderApiKey())
+                .contentType(JSON)
+                .log().uri()
+                .when()
+                .post("https://reqres.in/api/login")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(200)
+                .extract().as(LoginResponseModel.class);
 
         assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
 
