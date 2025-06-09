@@ -57,4 +57,6 @@ public class StatusTests {
                 .body("total", is(5))
                 .body("browsers.chrome", hasKey("128.0"));
     }
+
+
 }
