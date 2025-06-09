@@ -1,4 +1,5 @@
-import io.restassured.http.ContentType;
+package tests;
+
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;

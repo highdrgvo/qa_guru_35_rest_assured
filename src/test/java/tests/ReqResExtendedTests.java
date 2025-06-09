@@ -1,9 +1,14 @@
+package tests;
+
+import models.LoginBodyModel;
+import models.LoginResponseModel;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.post;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ReqResExtendedTests {
@@ -33,28 +38,31 @@ public class ReqResExtendedTests {
 
     @Test
     void successfulLoginTest(){
-//        String authData = "{\n" +
-//                "    \"email\": \"eve.holt@reqres.in\",\n" +
-//                "    \"password\": \"cityslicka\"\n" +
-//                "}";
 
-        authData = new authData();
+        LoginBodyModel authData = new LoginBodyModel();
+
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
+        authData.setHeaderApiKey("reqres-free-v1");
 
-        given() // Дано:
+        LoginResponseModel response = given()
+        // LoginResponseModel response сохраняет Java-объект (в джава объект завернули на этапе extract())
+        // в переменную для последующего использования.
                 .body(authData)
+                .header("x-api-key", authData.getHeaderApiKey())
                 .contentType(JSON)
-                .header("x-api-key", "reqres-free-v1")
                 .log().uri()
-                .when()
+        .when()
                 .post("https://reqres.in/api/login")
-
-                .then()
+        .then()
                 .log().status()
                 .log().body()
                 .statusCode(200)
-                .body("token", is("QpwL5tke4Pnpja7X4"));
+                .extract().as(LoginResponseModel.class);
+        // .extract().as(LoginResponseModel.class) - преобразует JSON-ответ от сервера в Java-объект.
+        // То есть объект был создан, но не сохранен.
+
+        assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
 
     }
 }
