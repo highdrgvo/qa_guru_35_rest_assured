@@ -84,13 +84,13 @@ public class ReqResExtendedTests {
                 .header("x-api-key", authData.getHeaderApiKey())
                 .contentType(JSON)
                 .log().uri()
-                .when()
+        .when()
                 .post("https://reqres.in/api/login")
-                .then()
+        .then()
                 .log().status()
                 .log().body()
                 .statusCode(200)
-                .extract().as(LoginResponseModel.class);
+                .extract().as(LoginResponseLombokModel.class);
 
         assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
 
