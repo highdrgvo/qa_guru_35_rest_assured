@@ -9,8 +9,7 @@ import java.util.Objects;
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class rest_assured_35_hw {
@@ -69,7 +68,26 @@ public class rest_assured_35_hw {
                 .statusCode(200)
                 .log().body()
                 .body("data.size()", equalTo(6));
+                //.size() — это метод, а не поле. В Java/Kotlin/Groovy
+                // (а RestAssured использует Groovy-подобный синтаксис для JSON Path)
+                // размер коллекции получают через вызов метода size().
+    }
 
+    @Test
+    void checkThatDataArrayHasAquaSkyColorTest() {
+
+        given()
+                .body(authData)
+                .contentType(JSON)
+                .header("x-api-key", "reqres-free-v1")
+                .log().uri()
+        .when()
+                .get(url + "/api/unknown")
+        .then()
+                .log().status()
+                .statusCode(200)
+                .log().body()
+                .body("data.name", hasItem(equalTo("aqua sky")));
     }
 
 
