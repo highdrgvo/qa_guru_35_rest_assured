@@ -1,18 +1,13 @@
-import io.restassured.path.json.JsonPath;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Objects;
 
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class rest_assured_35_hw {
+public class RestAssured35HomeWork {
 
     String url = "https://reqres.in";
     String authData = "{\n" +
@@ -21,6 +16,7 @@ public class rest_assured_35_hw {
             "}";
 
     @Test
+    @DisplayName("Get data on non-existing user")
     void getInfoOnNonexistingUserTest() {
 
         given()
@@ -37,6 +33,7 @@ public class rest_assured_35_hw {
     }
 
     @Test
+    @DisplayName("Get data by user with id = 3")
     void getInfoByUserWithId3(){
 
         given()
@@ -54,7 +51,8 @@ public class rest_assured_35_hw {
     }
 
     @Test
-    void checkThatTotalofColorsAre6Test() {
+    @DisplayName("Check that number of colors are 6")
+    void checkThatNumberOfColorsAre6Test() {
 
         given()
                 .body(authData)
@@ -74,6 +72,7 @@ public class rest_assured_35_hw {
     }
 
     @Test
+    @DisplayName("Check that the sky color is in the list of colors")
     void checkThatDataArrayHasAquaSkyColorTest() {
 
         given()
@@ -88,6 +87,30 @@ public class rest_assured_35_hw {
                 .statusCode(200)
                 .log().body()
                 .body("data.name", hasItem(equalTo("aqua sky")));
+    }
+
+    @Test
+    @DisplayName("Register in a new user")
+    void registerNewUserTest() {
+
+        String newUser = "{\n" +
+                "    \"email\": \"eve.holt@reqres.in\",\n" +
+                "    \"password\": \"pistol\"\n" +
+                "}";
+
+        given()
+                .body(authData)
+                .contentType(JSON)
+                .header("x-api-key", "reqres-free-v1")
+                .body(newUser)
+        .when()
+                .post(url + "/api/register")
+        .then()
+                .log().status()
+                .statusCode(200)
+                .log().body()
+                .body("id", is(4))
+                .body("token", is("QpwL5tke4Pnpja7X4"));
     }
 
 
