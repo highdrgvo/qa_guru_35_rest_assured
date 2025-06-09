@@ -10,17 +10,12 @@ import static org.hamcrest.Matchers.*;
 public class RestAssured35HomeWork {
 
     String url = "https://reqres.in";
-    String authData = "{\n" +
-            "    \"email\": \"eve.holt@reqres.in\",\n" +
-            "    \"password\": \"cityslicka\"\n" +
-            "}";
 
     @Test
     @DisplayName("Get data on non-existing user")
     void getInfoOnNonexistingUserTest() {
 
         given()
-                .body(authData)
                 .contentType(JSON)
                 .header("x-api-key", "reqres-free-v1")
                 .log().uri()
@@ -37,7 +32,6 @@ public class RestAssured35HomeWork {
     void getInfoByUserWithId3(){
 
         given()
-                .body(authData)
                 .contentType(JSON)
                 .header("x-api-key", "reqres-free-v1")
                 .log().uri()
@@ -55,7 +49,6 @@ public class RestAssured35HomeWork {
     void checkThatNumberOfColorsAre6Test() {
 
         given()
-                .body(authData)
                 .contentType(JSON)
                 .header("x-api-key", "reqres-free-v1")
                 .log().uri()
@@ -76,7 +69,6 @@ public class RestAssured35HomeWork {
     void checkThatDataArrayHasAquaSkyColorTest() {
 
         given()
-                .body(authData)
                 .contentType(JSON)
                 .header("x-api-key", "reqres-free-v1")
                 .log().uri()
@@ -99,7 +91,6 @@ public class RestAssured35HomeWork {
                 "}";
 
         given()
-                .body(authData)
                 .contentType(JSON)
                 .header("x-api-key", "reqres-free-v1")
                 .body(newUser)
@@ -112,6 +103,4 @@ public class RestAssured35HomeWork {
                 .body("id", is(4))
                 .body("token", is("QpwL5tke4Pnpja7X4"));
     }
-
-
 }
