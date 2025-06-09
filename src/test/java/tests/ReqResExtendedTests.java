@@ -7,8 +7,8 @@ import models.pojo.LoginBodyModel;
 import models.pojo.LoginResponseModel;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.post;
+import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,11 +78,10 @@ public class ReqResExtendedTests {
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
-        authData.setHeaderApiKey("reqres-free-v1");
 
         LoginResponseLombokModel response = given()
                 .body(authData)
-                .header("x-api-key", authData.getHeaderApiKey())
+                .header("x-api-key", authData.getApiKey())
                 .contentType(JSON)
                 .log().uri()
         .when()
@@ -106,7 +105,7 @@ public class ReqResExtendedTests {
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
-        authData.setHeaderApiKey("reqres-free-v1");
+        // authData.setHeaderApiKey("reqres-free-v1");
 
         LoginResponseLombokModel response = given()
                 .filter(new AllureRestAssured())
@@ -114,7 +113,7 @@ public class ReqResExtendedTests {
                 .log().uri()
                 .log().body()
                 .body(authData)
-                .header("x-api-key", authData.getHeaderApiKey())
+                // .header("x-api-key", authData.getHeaderApiKey())
                 .contentType(JSON)
 
         .when()
@@ -133,20 +132,18 @@ public class ReqResExtendedTests {
     void successfulLoginCustomAllureTest(){
 
         LoginBodyLombokModel authData = new LoginBodyLombokModel();
-
         // Чтобы lombok работал, надо установить плагин в идее
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
-        authData.setHeaderApiKey("reqres-free-v1");
 
         LoginResponseLombokModel response = given()
-                .filter(new AllureRestAssured())
+                .filter(withCustomTemplates())
                 .log().headers()
                 .log().uri()
                 .log().body()
                 .body(authData)
-                .header("x-api-key", authData.getHeaderApiKey())
+                .header("x-api-key", authData.getApiKey())
                 .contentType(JSON)
 
                 .when()
