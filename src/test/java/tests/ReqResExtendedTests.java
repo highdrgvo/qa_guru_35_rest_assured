@@ -1,8 +1,10 @@
 package tests;
 
 import io.qameta.allure.restassured.AllureRestAssured;
+import models.lombok.LoginBodyApiKeyLombokModel;
 import models.lombok.LoginBodyLombokModel;
 import models.lombok.LoginResponseLombokModel;
+import models.pojo.LoginBodyApiKeyModel;
 import models.pojo.LoginBodyModel;
 import models.pojo.LoginResponseModel;
 import org.junit.jupiter.api.Test;
@@ -46,18 +48,17 @@ public class ReqResExtendedTests {
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
-        authData.setHeaderApiKey("reqres-free-v1");
 
         LoginResponseModel response = given()
-        // LoginResponseModel response сохраняет Java-объект (в джава объект завернули на этапе extract())
-        // в переменную для последующего использования.
+                // LoginResponseModel response сохраняет Java-объект (в джава объект завернули на этапе extract())
+                // в переменную для последующего использования.
                 .body(authData)
-                .header("x-api-key", authData.getHeaderApiKey())
+                .header("x-api-key", "reqres-free-v1")
                 .contentType(JSON)
                 .log().uri()
-        .when()
+                .when()
                 .post("https://reqres.in/api/login")
-        .then()
+                .then()
                 .log().status()
                 .log().body()
                 .statusCode(200)
@@ -73,15 +74,17 @@ public class ReqResExtendedTests {
     void successfulLoginLombokTest(){
 
         LoginBodyLombokModel authData = new LoginBodyLombokModel();
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
 
         // Чтобы lombok работал, надо установить плагин в идее
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
+        apiKey.setApiKey("reqres-free-v1");
 
         LoginResponseLombokModel response = given()
                 .body(authData)
-                .header("x-api-key", authData.getApiKey())
+                .header("x-api-key", apiKey.getApiKey())
                 .contentType(JSON)
                 .log().uri()
         .when()
@@ -100,12 +103,13 @@ public class ReqResExtendedTests {
     void successfulLoginAllureTest(){
 
         LoginBodyLombokModel authData = new LoginBodyLombokModel();
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
 
         // Чтобы lombok работал, надо установить плагин в идее
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
-        // authData.setHeaderApiKey("reqres-free-v1");
+        apiKey.setApiKey("reqres-free-v1");
 
         LoginResponseLombokModel response = given()
                 .filter(new AllureRestAssured())
@@ -113,7 +117,7 @@ public class ReqResExtendedTests {
                 .log().uri()
                 .log().body()
                 .body(authData)
-                // .header("x-api-key", authData.getHeaderApiKey())
+                .header("x-api-key", apiKey.getApiKey())
                 .contentType(JSON)
 
         .when()
@@ -132,10 +136,12 @@ public class ReqResExtendedTests {
     void successfulLoginCustomAllureTest(){
 
         LoginBodyLombokModel authData = new LoginBodyLombokModel();
-        // Чтобы lombok работал, надо установить плагин в идее
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
+
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
+        apiKey.setApiKey("reqres-free-v1");
 
         LoginResponseLombokModel response = given()
                 .filter(withCustomTemplates())
@@ -143,7 +149,7 @@ public class ReqResExtendedTests {
                 .log().uri()
                 .log().body()
                 .body(authData)
-                .header("x-api-key", authData.getApiKey())
+                .header("x-api-key", apiKey.getApiKey())
                 .contentType(JSON)
 
                 .when()

@@ -2,15 +2,7 @@ package models.pojo;
 
 public class LoginBodyModel {
 
-    String email, password, headerApiKey;
-
-    public String getHeaderApiKey() {
-        return headerApiKey;
-    }
-
-    public void setHeaderApiKey(String headerApiKey) {
-        this.headerApiKey = headerApiKey;
-    }
+    String email, password;
 
     public void setEmail(String email) {
         this.email = email;
