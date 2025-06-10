@@ -10,6 +10,7 @@ import models.pojo.LoginResponseModel;
 import org.junit.jupiter.api.Test;
 
 import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
@@ -80,7 +81,6 @@ public class ReqResExtendedTests {
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
 
         // Чтобы lombok работал, надо установить плагин в идее
-
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
         apiKey.setApiKey("reqres-free-v1");
@@ -107,8 +107,6 @@ public class ReqResExtendedTests {
 
         LoginBodyLombokModel authData = new LoginBodyLombokModel();
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
-
-        // Чтобы lombok работал, надо установить плагин в идее
 
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
@@ -141,7 +139,6 @@ public class ReqResExtendedTests {
         LoginBodyLombokModel authData = new LoginBodyLombokModel();
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
 
-
         authData.setEmail("eve.holt@reqres.in");
         authData.setPassword("cityslicka");
         apiKey.setApiKey("reqres-free-v1");
@@ -165,5 +162,57 @@ public class ReqResExtendedTests {
 
         assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
 
+    }
+
+    @Test
+    void successfulLoginWithStepsTest(){
+
+        LoginBodyLombokModel authData = new LoginBodyLombokModel();
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
+
+        authData.setEmail("eve.holt@reqres.in");
+        authData.setPassword("cityslicka");
+        apiKey.setApiKey("reqres-free-v1");
+
+        LoginResponseLombokModel response = step("Make a request", () ->
+
+            given()
+                .filter(withCustomTemplates())
+                .log().headers()
+                .log().uri()
+                .log().body()
+                .body(authData)
+                .header("x-api-key", apiKey.getApiKey())
+                .contentType(JSON)
+
+            .when()
+                .post("https://reqres.in/api/login")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(200)
+                .extract().as(LoginResponseLombokModel.class));
+
+        step("Make a request №2", () ->
+                given()
+                        .filter(withCustomTemplates())
+                        .log().headers()
+                        .log().uri()
+                        .log().body()
+                        .body(authData)
+                        .header("x-api-key", apiKey.getApiKey())
+                        .contentType(JSON)
+
+                        .when()
+                        .post("https://reqres.in/api/login")
+                        .then()
+                        .log().status()
+                        .log().body()
+                        .statusCode(200)
+                        .extract().as(LoginResponseLombokModel.class));
+
+        step("Check response", () ->
+            assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
+        // если в аллюр степе одно действие, то можно не ставить {}.
     }
 }
