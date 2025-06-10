@@ -4,6 +4,7 @@ import io.qameta.allure.restassured.AllureRestAssured;
 import models.lombok.LoginBodyApiKeyLombokModel;
 import models.lombok.LoginBodyLombokModel;
 import models.lombok.LoginResponseLombokModel;
+import models.lombok.MissingPasswordLombokModel;
 import models.pojo.LoginBodyApiKeyModel;
 import models.pojo.LoginBodyModel;
 import models.pojo.LoginResponseModel;
@@ -15,6 +16,7 @@ import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static specs.LoginSpec.*;
 
 
 public class ReqResExtendedTests {
@@ -214,5 +216,54 @@ public class ReqResExtendedTests {
         step("Check response", () ->
             assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
         // если в аллюр степе одно действие, то можно не ставить {}.
+    }
+
+    @Test
+    void successfulLoginWithSpecsTest() {
+
+        LoginBodyLombokModel authData = new LoginBodyLombokModel();
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
+
+        authData.setEmail("eve.holt@reqres.in");
+        authData.setPassword("cityslicka");
+        apiKey.setApiKey("reqres-free-v1");
+
+        LoginResponseLombokModel response = step("Make a request", () ->
+                given()
+                        .spec(loginRequestSpec) // можно так или в given вставить loginRequestSpec
+                        .body(authData)
+                        .header("x-api-key", apiKey.getApiKey()) // это тоже потом в спеку засунуть
+                .when()
+                        .post()
+                .then()
+                        .spec(loginResponseSpec)
+                        .extract().as(LoginResponseLombokModel.class));
+
+        step("Check response", () ->
+                assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
+    }
+
+    @Test
+    void missingPasswordTest() {
+
+        LoginBodyLombokModel authData = new LoginBodyLombokModel();
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
+
+        authData.setEmail("eve.holt@reqres.in");
+        apiKey.setApiKey("reqres-free-v1");
+
+        MissingPasswordLombokModel response = step("Make a request", () ->
+                given(loginRequestSpec)
+                        // .spec(loginRequestSpec) можно так или в given вставить
+                        .body(authData)
+                        .header("x-api-key", apiKey.getApiKey()) // это тоже потом в спеку засунуть
+                .when()
+                        .post()
+                .then()
+                        .spec(missingPasswordResponseSpec)
+                        .extract().as(MissingPasswordLombokModel.class));
+
+        step("Check response", () ->
+                assertEquals("Missing password", response.getError()));
     }
 }
