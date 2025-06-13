@@ -1,7 +1,11 @@
 package tests;
 
 import models.lombok.LoginBodyApiKeyLombokModel;
+import models.lombok.UpdateUserProfileRequestLombokModel;
+import models.lombok.UpdateUserProfileResponseLombokModel;
 import models.lombok.UserProfileResponseLombokModel;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;
@@ -13,7 +17,8 @@ import static specs.UserProfileSpec.userProfileResSpec;
 public class HomeWorkReqResTests {
 
     @Test
-    void checkLastNameUserWithId2() {
+    @Tag("home_work_rest_assured_models_specs_35")
+    void checkLastNameUserWithId2Test() {
 
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
         apiKey.setApiKey("reqres-free-v1");
@@ -27,7 +32,7 @@ public class HomeWorkReqResTests {
                 .spec(userProfileResSpec)
                 .extract().as(UserProfileResponseLombokModel.class));
 
-        step("Check that the last_name is Weaver", () ->
+        step("The last_name is Weaver", () ->
         assertEquals("Weaver", response.getData().getLastName()));
 
         // Если внутри лямбды нужно выполнить больше одного выражения, обязательно используйте {}:
@@ -39,5 +44,33 @@ public class HomeWorkReqResTests {
         // В вашем коде скобки не требуются, потому что:
         // Каждый step() содержит только один оператор (либо запрос, либо assertEquals).
 
+    }
+
+    @Test
+    @Tag("home_work_rest_assured_models_specs_35")
+    void updateUserNameAndJobTest() {
+
+        LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
+        apiKey.setApiKey("reqres-free-v1");
+
+        UpdateUserProfileRequestLombokModel reqBody = new UpdateUserProfileRequestLombokModel();
+        reqBody.setName("morpheus");
+        reqBody.setJob("zion resident");
+
+        UpdateUserProfileResponseLombokModel response = step("Make a request", () ->
+                given(userProfileReqSpec)
+                        .header("x-api-key", apiKey.getApiKey())
+                        .body(reqBody)
+                .when()
+                        .patch()
+                .then()
+                        .spec(userProfileResSpec)
+                        .extract().as(UpdateUserProfileResponseLombokModel.class));
+
+        step("The name is" + " " + reqBody.getName(), () ->
+                assertEquals(reqBody.getName(), response.getName()));
+
+        step("The job is" + " " + reqBody.getJob(), () ->
+                assertEquals(reqBody.getJob(), response.getJob()));
     }
 }
