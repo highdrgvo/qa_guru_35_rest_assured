@@ -17,7 +17,7 @@ public class UserProfileSpec {
             .log().headers()
             .log().method()
             .contentType(JSON)
-            .baseUri("https://reqres.in/")
+            .baseUri("https://reqres.in")
             .basePath("/api/users/2");
 
     public static ResponseSpecification userProfileResSpec = new ResponseSpecBuilder()
@@ -25,4 +25,13 @@ public class UserProfileSpec {
             .log(STATUS)
             .log(BODY)
             .build();
+
+    public static RequestSpecification getUserProfileReqSpec = with()
+            .filter(withCustomTemplates())
+            .log().headers()
+            .log().method()
+            .contentType(JSON)
+            .baseUri("https://reqres.in")
+            .basePath("/api/users?page=2");
+
 }
