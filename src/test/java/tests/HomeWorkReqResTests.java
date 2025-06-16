@@ -72,7 +72,7 @@ public class HomeWorkReqResTests {
 
     @Test
     @Tag("home_work_rest_assured_models_specs_35")
-    void checkThatUserTobiasFunkeExistTest() {
+    void checkThatUserEveHoltExistsTest() {
 
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
         apiKey.setApiKey("reqres-free-v1");
