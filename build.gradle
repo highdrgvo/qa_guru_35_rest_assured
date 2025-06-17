@@ -47,7 +47,7 @@ tasks.withType(Test) {
 }
 
 
-task jenkins_job_hw_rest_assured_models_specs(type: Test) {
+task jenkins_job_hw_rest_assured(type: Test) {
     useJUnitPlatform {
         includeTags("hw_rest_assured_models_specs_35")
     }
