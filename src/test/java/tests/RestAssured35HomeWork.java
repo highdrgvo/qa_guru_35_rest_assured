@@ -105,4 +105,64 @@ public class RestAssured35HomeWork {
                 .body("id", is(4))
                 .body("token", is("QpwL5tke4Pnpja7X4"));
     }
+
+    @Test
+    @DisplayName("Update user profile with id 2 (put method)")
+    void updateUserProfileId2MethodPutTest() {
+
+        String reqBody = "{\n" +
+                "    \"name\": \"morpheus\",\n" +
+                "    \"job\": \"zion resident\"\n" +
+                "}";
+
+        given()
+                .contentType(JSON)
+                .header("x-api-key", "reqres-free-v1")
+                .body(reqBody)
+        .when()
+                .put(url + "/api/users/2")
+        .then()
+                .log().status()
+                .statusCode(200)
+                .log().body()
+                .body("name", is("morpheus"))
+                .body("job", is("zion resident"));
+    }
+
+    @Test
+    @DisplayName("Update user profile with id 2 (patch method)")
+    void updateUserProfileId2MethodPatchTest() {
+
+        String reqBody = "{\n" +
+                "    \"name\": \"morpheus\",\n" +
+                "    \"job\": \"zion resident\"\n" +
+                "}";
+
+        given()
+                .contentType(JSON)
+                .header("x-api-key", "reqres-free-v1")
+                .body(reqBody)
+        .when()
+                .patch(url + "/api/users/2")
+        .then()
+                .log().status()
+                .statusCode(200)
+                .log().body()
+                .body("name", is("morpheus"))
+                .body("job", is("zion resident"));
+    }
+
+    @Test
+    @DisplayName("Delete user profile with id 2")
+    void deleteUserProfileId2Test() {
+
+        given()
+                .contentType(JSON)
+                .header("x-api-key", "reqres-free-v1")
+        .when()
+                .delete(url + "/api/users/2")
+        .then()
+                .log().status()
+                .statusCode(204);
+    }
 }
