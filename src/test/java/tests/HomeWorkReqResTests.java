@@ -12,7 +12,7 @@ import static specs.UserProfileSpec.*;
 public class HomeWorkReqResTests {
 
     @Test
-    @Tag("home_work_rest_assured_models_specs_35")
+    @Tag("hw_rest_assured_models_specs_35")
     void checkLastNameUserWithId2Test() {
 
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
@@ -32,7 +32,7 @@ public class HomeWorkReqResTests {
     }
 
     @Test
-    @Tag("home_work_rest_assured_models_specs_35")
+    @Tag("hw_rest_assured_models_specs_35")
     void updateUserNameAndJobTest() {
 
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
@@ -60,7 +60,7 @@ public class HomeWorkReqResTests {
     }
 
     @Test
-    @Tag("home_work_rest_assured_models_specs_35")
+    @Tag("hw_rest_assured_models_specs_35")
     void checkThatUserEveHoltExistsTest() {
 
         LoginBodyApiKeyLombokModel apiKey = new LoginBodyApiKeyLombokModel();
