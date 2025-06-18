@@ -19,16 +19,16 @@ public class HomeWorkReqResTests {
         apiKey.setApiKey("reqres-free-v1");
 
         UserProfileResponseLombokModel response = step("Make a request", () ->
-        given(userProfileReqSpec)
-                .header("x-api-key", apiKey.getApiKey())
-        .when()
-                .get()
-        .then()
-                .spec(userProfileResSpec)
-                .extract().as(UserProfileResponseLombokModel.class));
+                given(userProfileReqSpec)
+                        .header("x-api-key", apiKey.getApiKey())
+                        .when()
+                        .get()
+                        .then()
+                        .spec(userProfileResSpec)
+                        .extract().as(UserProfileResponseLombokModel.class));
 
         step("The last_name is Weaver", () ->
-        assertEquals("Weaver", response.getData().getLastName()));
+                assertEquals("Weaver", response.getData().getLastName()));
     }
 
     @Test
@@ -46,9 +46,9 @@ public class HomeWorkReqResTests {
                 given(userProfileReqSpec)
                         .header("x-api-key", apiKey.getApiKey())
                         .body(reqBody)
-                .when()
+                        .when()
                         .patch()
-                .then()
+                        .then()
                         .spec(userProfileResSpec)
                         .extract().as(UpdateUserProfileResponseLombokModel.class));
 
